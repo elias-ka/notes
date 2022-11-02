@@ -7,13 +7,22 @@ import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl(
     private val dao: NoteDao
-): NoteRepository {
-    override fun getNotes(): Flow<List<Note>> {
-        return dao.getNotes()
+) : NoteRepository {
+
+    override fun getNotesStream(): Flow<List<Note>> {
+        return dao.getNotesStream()
     }
 
-    override fun getNoteById(id: Int): Flow<Note?> {
-        return dao.getNoteById(id)
+    override fun getNoteStream(id: Int): Flow<Note> {
+        return dao.getNoteStream(id)
+    }
+
+    override suspend fun pinNotes(vararg noteIds: Int) {
+        dao.pinNote(*noteIds)
+    }
+
+    override suspend fun unpinNotes(vararg noteIds: Int) {
+        dao.unpinNotes(*noteIds)
     }
 
     override suspend fun insertNote(note: Note) {

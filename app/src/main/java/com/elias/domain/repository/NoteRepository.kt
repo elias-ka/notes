@@ -4,9 +4,13 @@ import com.elias.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
-    fun getNotes(): Flow<List<Note>>
+    fun getNotesStream(): Flow<List<Note>>
 
-    fun getNoteById(id: Int): Flow<Note?>
+    fun getNoteStream(id: Int): Flow<Note>
+
+    suspend fun pinNotes(vararg noteIds: Int)
+
+    suspend fun unpinNotes(vararg noteIds: Int)
 
     suspend fun insertNote(note: Note)
 

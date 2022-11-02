@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Notes</string>
+
+    <string name="note_title_placeholder">Title</string>
+    <string name="note_content_placeholder">Note</string>
+    <string name="empty_note_list_message">Notes you add appear here</string>
+    <string name="add_note">Add note</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Go back</string>
+    <string name="cd_delete">Delete note</string>
+    <string name="cd_pin">Pin</string>
+    <string name="cd_unpin">Unpin</string>
+    <string name="cd_search">Search</string>
 </resources>
