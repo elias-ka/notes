@@ -2,7 +2,6 @@ package com.elias.presentation.note_detail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -46,7 +45,7 @@ import com.elias.presentation.components.TransparentTextField
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalLifecycleComposeApi::class,
-    ExperimentalComposeUiApi::class, ExperimentalLayoutApi::class,
+    ExperimentalComposeUiApi::class,
 )
 @Composable
 fun NoteDetailScreen(
@@ -72,47 +71,36 @@ fun NoteDetailScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    Scaffold(
-        modifier = modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                title = { Text("") },
-                scrollBehavior = scrollBehavior,
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            viewModel.onEvent(NoteDetailEvent.SaveNote)
-                            onNavigationIconClick()
-                        }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.cd_back)
-                        )
-                    }
-                },
-                actions = {
-                    IconToggleButton(
-                        checked = uiState.isNotePinned,
-                        onCheckedChange = { viewModel.onEvent(NoteDetailEvent.OnPinToggle(it)) }
-                    ) {
-                        Icon(
-                            imageVector = if (uiState.isNotePinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
-                            contentDescription = if (uiState.isNotePinned) stringResource(R.string.cd_unpin)
-                            else stringResource(R.string.cd_pin)
-                        )
-                    }
-                    if (uiState.noteId != null) {
-                        IconButton(onClick = { viewModel.onEvent(NoteDetailEvent.DeleteNote); onNavigationIconClick() }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.cd_delete)
-                            )
-                        }
-                    }
+    Scaffold(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
+        TopAppBar(title = { Text("") }, scrollBehavior = scrollBehavior, navigationIcon = {
+            IconButton(onClick = {
+                viewModel.onEvent(NoteDetailEvent.SaveNote)
+                onNavigationIconClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.cd_back)
+                )
+            }
+        }, actions = {
+            IconToggleButton(checked = viewModel.isNotePinned,
+                onCheckedChange = { viewModel.onEvent(NoteDetailEvent.OnPinToggle(it)) }) {
+                Icon(
+                    imageVector = if (viewModel.isNotePinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
+                    contentDescription = if (viewModel.isNotePinned) stringResource(R.string.cd_unpin)
+                    else stringResource(R.string.cd_pin)
+                )
+            }
+            if (uiState.noteId != null) {
+                IconButton(onClick = { viewModel.onEvent(NoteDetailEvent.DeleteNote); onNavigationIconClick() }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.cd_delete)
+                    )
                 }
-            )
-        }
+            }
+        })
+    }
 
     ) { padding ->
         // TODO: fix keyboard overlapping the text while still having verticalScroll modifier on the column,
@@ -133,9 +121,9 @@ fun NoteDetailScreen(
                         FocusDirection.Next
                     )
                 }),
-                text = uiState.noteTitle,
+                text = { viewModel.noteTitle },
                 onValueChange = { viewModel.onEvent(NoteDetailEvent.OnTitleChange(it)) },
-                placeholder = stringResource(R.string.note_title_placeholder),
+                placeholder = R.string.note_title_placeholder,
                 textStyle = MaterialTheme.typography.titleLarge
             )
             TransparentTextField(
@@ -143,9 +131,9 @@ fun NoteDetailScreen(
                     .fillMaxSize()
                     .focusRequester(contentFieldFocus)
                     .focusProperties { previous = titleFieldFocus },
-                text = uiState.noteContent,
+                text = { viewModel.noteContent },
                 onValueChange = { viewModel.onEvent(NoteDetailEvent.OnContentChange(it)) },
-                placeholder = stringResource(R.string.note_content_placeholder),
+                placeholder = R.string.note_content_placeholder,
             )
         }
     }

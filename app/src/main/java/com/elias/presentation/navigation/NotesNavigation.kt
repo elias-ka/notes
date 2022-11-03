@@ -9,8 +9,6 @@ object NotesDestinations {
 
 class NotesNavigationActions(navController: NavHostController) {
     val navigateToDetail: (Int) -> Unit = { noteId ->
-        navController.navigate("${NotesDestinations.NOTE_DETAIL_ROUTE}/$noteId") {
-            launchSingleTop = true
-        }
+        navController.navigate("${NotesDestinations.NOTE_DETAIL_ROUTE}/$noteId")
     }
 }
