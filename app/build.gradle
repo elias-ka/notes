@@ -5,12 +5,29 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def signingFile = rootProject.file("signing.properties")
+def signingProperties = new Properties()
+signingProperties.load(new FileInputStream(signingFile))
+
 android {
     namespace 'com.elias'
     compileSdk 33
 
+    signingConfigs {
+        release {
+            try {
+                storeFile file(signingProperties['storeFile'])
+                storePassword signingProperties['storePassword']
+                keyAlias "Notes"
+                keyPassword signingProperties['keyPassword']
+            } catch (ignored) {
+                throw new InvalidUserDataException("You should define 'storeFile', 'storePassword' and 'keyPassword' in signing.properties.")
+            }
+        }
+    }
+
     defaultConfig {
-        applicationId "com.elias"
+        applicationId "com.elias.notes"
         minSdk 23
         targetSdk 33
         versionCode 1
@@ -31,10 +48,14 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
+            multiDexEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
             debuggable true
         }
     }
