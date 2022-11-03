@@ -28,12 +28,14 @@ fun NotesNavGraph(
                 onNoteClick = { noteId -> navigationActions.navigateToDetail(noteId) },
                 onFabClick = { navigationActions.navigateToDetail(-1) })
         }
-        composable(route = "${NotesDestinations.NOTE_DETAIL_ROUTE}/{noteId}", arguments = listOf(
-            navArgument("noteId") {
-                type = NavType.IntType
-                defaultValue = -1
-            }
-        )) {
+        composable(
+            route = "${NotesDestinations.NOTE_DETAIL_ROUTE}/{noteId}",
+            arguments = listOf(
+                navArgument("noteId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )) {
             NoteDetailScreen(
                 modifier = modifier,
                 onNavigationIconClick = { navController.navigateUp() })

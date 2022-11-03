@@ -71,36 +71,45 @@ fun NoteDetailScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    Scaffold(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
-        TopAppBar(title = { Text("") }, scrollBehavior = scrollBehavior, navigationIcon = {
-            IconButton(onClick = {
-                viewModel.onEvent(NoteDetailEvent.SaveNote)
-                onNavigationIconClick()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_back)
-                )
-            }
-        }, actions = {
-            IconToggleButton(checked = viewModel.isNotePinned,
-                onCheckedChange = { viewModel.onEvent(NoteDetailEvent.OnPinToggle(it)) }) {
-                Icon(
-                    imageVector = if (viewModel.isNotePinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
-                    contentDescription = if (viewModel.isNotePinned) stringResource(R.string.cd_unpin)
-                    else stringResource(R.string.cd_pin)
-                )
-            }
-            if (uiState.noteId != null) {
-                IconButton(onClick = { viewModel.onEvent(NoteDetailEvent.DeleteNote); onNavigationIconClick() }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.cd_delete)
-                    )
-                }
-            }
-        })
-    }
+    Scaffold(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = { Text("") },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            viewModel.onEvent(NoteDetailEvent.SaveNote)
+                            onNavigationIconClick()
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.cd_back)
+                        )
+                    }
+                }, actions = {
+                    IconToggleButton(checked = viewModel.isNotePinned,
+                        onCheckedChange = { viewModel.onEvent(NoteDetailEvent.OnPinToggle(it)) }) {
+                        Icon(
+                            imageVector = if (viewModel.isNotePinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
+                            contentDescription = if (viewModel.isNotePinned) stringResource(R.string.cd_unpin)
+                            else stringResource(R.string.cd_pin)
+                        )
+                    }
+                    if (uiState.noteId != null) {
+                        IconButton(
+                            onClick = {
+                                viewModel.onEvent(NoteDetailEvent.DeleteNote)
+                                onNavigationIconClick()
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.cd_delete)
+                            )
+                        }
+                    }
+                })
+        }
 
     ) { padding ->
         // TODO: fix keyboard overlapping the text while still having verticalScroll modifier on the column,

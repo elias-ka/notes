@@ -38,7 +38,8 @@ class NoteDetailViewModel @Inject constructor(
 
             viewModelScope.launch {
                 noteRepository.getNoteStream(existingNoteId.value).collect { note ->
-                    @Suppress("SENSELESS_COMPARISON") if (note != null) {
+                    @Suppress("SENSELESS_COMPARISON")
+                    if (note != null) {
                         _uiState.update {
                             it.copy(
                                 noteId = note.id,

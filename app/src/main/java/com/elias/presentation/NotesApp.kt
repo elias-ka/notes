@@ -13,5 +13,8 @@ fun NotesApp() {
         NotesNavigationActions(navController)
     }
 
-    NotesNavGraph(navigationActions = navigationActions, navController = navController)
+    NotesNavGraph(
+        navigationActions = navigationActions,
+        navController = navController
+    )
 }
