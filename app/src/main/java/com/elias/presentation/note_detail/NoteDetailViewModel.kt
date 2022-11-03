@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteDetailViewModel @Inject constructor(
-    private val noteRepository: NoteRepository, savedStateHandle: SavedStateHandle
+    private val noteRepository: NoteRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NoteDetailState())
@@ -73,7 +74,7 @@ class NoteDetailViewModel @Inject constructor(
             is NoteDetailEvent.SaveNote -> {
                 val isNewNote = uiState.value.noteId == null
                 if (isNewNote && noteTitle.isEmpty() && noteContent.isEmpty()) {
-                    deleteNote()
+                    return
                 } else {
                     saveNote()
                 }

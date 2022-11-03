@@ -65,9 +65,7 @@ fun NoteDetailScreen(
     }
 
     BackHandler {
-        if (uiState.noteId != null) {
-            viewModel.onEvent(NoteDetailEvent.SaveNote)
-        }
+        viewModel.onEvent(NoteDetailEvent.SaveNote)
         onNavigationIconClick()
     }
 
