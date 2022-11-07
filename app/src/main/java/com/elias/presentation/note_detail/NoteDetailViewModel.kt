@@ -33,9 +33,16 @@ class NoteDetailViewModel @Inject constructor(
     var isNotePinned by mutableStateOf(false)
         private set
 
+    var shouldFocusNoteContentField by mutableStateOf(false)
+        private set
+
+
     init {
         savedStateHandle.getStateFlow("noteId", -1).let { existingNoteId ->
-            if (existingNoteId.value == -1) return@let
+            if (existingNoteId.value == -1) {
+                shouldFocusNoteContentField = true
+                return@let
+            }
 
             viewModelScope.launch {
                 noteRepository.getNoteStream(existingNoteId.value).collect { note ->
@@ -45,12 +52,12 @@ class NoteDetailViewModel @Inject constructor(
                             it.copy(
                                 noteId = note.id,
                                 timestamp = note.timestamp,
-                                shouldFocusNoteContentField = note.content.isEmpty()
                             )
                         }
                         isNotePinned = note.isPinned
                         noteTitle = note.title
                         noteContent = note.content
+                        shouldFocusNoteContentField = note.content.isEmpty()
                     }
                 }
             }
@@ -80,7 +87,7 @@ class NoteDetailViewModel @Inject constructor(
                 }
             }
 
-            is NoteDetailEvent.DeleteNote -> deleteNote()
+            is NoteDetailEvent.DeleteNote -> deleteNotes(_uiState.value.noteId!!)
 
         }
     }
@@ -99,9 +106,9 @@ class NoteDetailViewModel @Inject constructor(
         }
     }
 
-    private fun deleteNote() {
+    private fun deleteNotes(vararg noteIds: Int) {
         viewModelScope.launch {
-            noteRepository.deleteNotes(_uiState.value.noteId!!)
+            noteRepository.deleteNotes(*noteIds)
         }
     }
 }

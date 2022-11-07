@@ -58,7 +58,7 @@ fun NoteDetailScreen(
     val focusManager = LocalFocusManager.current
     val (titleFieldFocus, contentFieldFocus) = remember { FocusRequester.createRefs() }
 
-    if (uiState.shouldFocusNoteContentField) {
+    if (viewModel.shouldFocusNoteContentField) {
         LaunchedEffect(key1 = Unit) {
             contentFieldFocus.requestFocus()
         }
