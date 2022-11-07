@@ -1,45 +1,53 @@
 package com.elias.presentation.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.elias.domain.model.Note
+import com.elias.presentation.note_list.UiNote
 import com.elias.presentation.theme.NotesShapes
 import com.elias.presentation.theme.NotesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListItem(
-    note: Note,
+    note: UiNote,
     modifier: Modifier = Modifier,
-    cardColors: CardColors = CardDefaults.outlinedCardColors(),
-    borderStroke: BorderStroke = CardDefaults.outlinedCardBorder(),
-    onNoteClick: (Int) -> Unit
+    border: BorderStroke = CardDefaults.outlinedCardBorder(),
+    colors: CardColors = CardDefaults.outlinedCardColors(),
+    onNoteClick: (Int) -> Unit = {},
 ) {
     Card(
         shape = NotesShapes.medium,
-        border = borderStroke,
-        colors = cardColors,
-        modifier = modifier.defaultMinSize(minHeight = 48.dp),
+        border = border,
+        colors = colors,
+        modifier = modifier
+            .defaultMinSize(minHeight = 48.dp),
         onClick = { onNoteClick(note.id!!) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
-            Row(
-                modifier = Modifier.semantics(mergeDescendants = true, properties = {})
-            ) {
+            Row {
                 Text(
                     modifier = Modifier
                         .weight(1f)
@@ -76,7 +84,7 @@ fun NoteListItem(
 @Composable
 fun NoteListItemPreview() {
     NotesTheme(darkTheme = true) {
-        NoteListItem(note = Note(
+        NoteListItem(note = UiNote(
             id = 0,
             title = "Note title",
             content = "Note content",

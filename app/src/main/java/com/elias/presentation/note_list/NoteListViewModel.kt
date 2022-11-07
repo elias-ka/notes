@@ -1,5 +1,6 @@
 package com.elias.presentation.note_list
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elias.domain.repository.NoteRepository
@@ -11,14 +12,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NoteListState())
-    val uiState = _uiState.asStateFlow()
+    private val _notes = MutableStateFlow(emptyList<UiNote>())
+    val notes = _notes.asStateFlow()
+
+    var isLoading = mutableStateOf(true)
+        private set
 
     init {
         getNotes()
@@ -27,9 +30,9 @@ class NoteListViewModel @Inject constructor(
     private fun getNotes() {
         viewModelScope.launch {
             noteRepository.getNotesStream()
-                .onEach { _uiState.update { it.copy(isLoading = false) } }
+                .onEach { isLoading.value = false }
                 .collect { notes ->
-                    _uiState.update { it.copy(notes = notes) }
+                    _notes.update { notes.map { UiNote.fromDomainNote(it) } }
                 }
         }
     }

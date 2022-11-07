@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.NoteAdd
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.elias.R
-import com.elias.domain.model.Note
 import com.elias.presentation.components.NoteListItem
 import com.elias.util.isScrolled
 
@@ -37,7 +37,8 @@ fun NoteListScreen(
     onFabClick: () -> Unit
 ) {
     val notesLazyListState = rememberLazyListState()
-    val uiState: NoteListState by viewModel.uiState.collectAsStateWithLifecycle()
+    val notes by viewModel.notes.collectAsStateWithLifecycle()
+    val isLoading by remember { viewModel.isLoading }
 
     Scaffold(
         modifier = modifier,
@@ -58,7 +59,7 @@ fun NoteListScreen(
             )
         }
     ) { padding ->
-        if (uiState.notes.isEmpty() && !uiState.isLoading) {
+        if (notes.isEmpty() && !isLoading) {
             EmptyNoteList()
         } else {
             NoteList(
@@ -66,7 +67,7 @@ fun NoteListScreen(
                     .padding(horizontal = 12.dp)
                     .fillMaxSize(),
                 contentPadding = padding,
-                notes = uiState.notes,
+                notes = notes,
                 notesLazyListState = notesLazyListState,
                 onNoteClick = { onNoteClick(it) },
             )
@@ -78,11 +79,11 @@ fun NoteListScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteList(
-    notes: List<Note>,
+    notes: List<UiNote>,
     notesLazyListState: LazyListState,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    onNoteClick: (Int) -> Unit,
+    onNoteClick: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -95,10 +96,9 @@ fun NoteList(
                 modifier = Modifier
                     .animateItemPlacement(tween(durationMillis = 250)),
                 note = note,
-                onNoteClick = onNoteClick,
+                onNoteClick = onNoteClick
             )
         }
-
     }
 }
 
