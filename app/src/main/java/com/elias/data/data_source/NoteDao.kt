@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM notes ORDER BY is_pinned DESC, timestamp DESC")
+    @Query("SELECT * FROM notes ORDER BY is_pinned DESC")
     fun getNotesStream(): Flow<List<Note>>
 
     @Query("SELECT * FROM notes WHERE id = :id ")
@@ -23,7 +23,7 @@ interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)
-
+    
     @Query("DELETE FROM notes WHERE id in (:ids)")
     suspend fun deleteNotes(vararg ids: Int)
 }
