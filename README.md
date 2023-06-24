@@ -8,9 +8,9 @@ This is a native Android application for taking notes. It allows users to create
 - **Delete notes**: Unwanted or outdated notes can be easily deleted with a single tap. This functionality ensures a clutter-free and organized note-taking experience.
 
 # Screenshots
-<img src="screenshots/notes_list_empty_demo.png" width="200" height="430" /> 
-<img src="screenshots/notes_list_demo.png" width="200" heigth="430" />
-<img src="screenshots/note_edit_demo.png" width="200" height="430" />
+|                      Empty notes list                      |                   Notes list                   |                  Edit note                   |
+| :--------------------------------------------------------: | :--------------------------------------------: | :------------------------------------------: |
+| ![Empty notes list](screenshots/notes_list_empty_demo.png) | ![Notes list](screenshots/notes_list_demo.png) | ![Edit note](screenshots/note_edit_demo.png) |
 
 # Libraries
 - Jetpack Compose with Material 3
